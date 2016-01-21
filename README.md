@@ -5,6 +5,12 @@
 [![Code Climate](https://img.shields.io/codeclimate/github/wpscanteam/wpscan.svg)](https://codeclimate.com/github/wpscanteam/wpscan)
 [![Dependency Status](https://img.shields.io/gemnasium/wpscanteam/wpscan.svg)](https://gemnasium.com/wpscanteam/wpscan)
 
+
+#### Reason of forking
+
+This repository is forked from https://github.com/wpscanteam/wpscan
+I extended the retrieval of version numbers. In the original repository it only looks for the README file, but now it also looks for changelog files. Due to many different formats (and naming of PHP versions etc), only the head (top 3 lines) are scanned.
+
 #### LICENSE
 
 #### WPScan Public Source License
