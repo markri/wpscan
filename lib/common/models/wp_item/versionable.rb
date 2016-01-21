@@ -15,6 +15,11 @@ class WpItem
           response = Browser.get(readme_url)
           @version = extract_version(response.body)
         end
+
+        if has_changelog?
+           response = Browser.get(changelog_url)
+           @version = extract_version_simple(response.body)
+        end
       end
       @version
     end
@@ -23,6 +28,35 @@ class WpItem
     def to_s
       item_version = self.version
       "#{@name}#{' - v' + item_version.strip if item_version}"
+    end
+
+    def extract_version_simple(body)
+
+      # Only check first three lines, to prevent false positives
+      bodyparts = body.split("\n")
+      headerparts = bodyparts[0..2]
+      header = headerparts.join("\n");
+
+      # Old method to remove PHP version false positives
+      # replaceregex = /\sPHP.{1,4}(\d{1,2}\.){1,2}\d{1,2}\s/i
+      # body = body.gsub(replaceregex, '');
+
+      regex = /((?:\d{1,2}\.){1,2}(?:\d{1,2}){0,1})\s/i
+      if header =~ regex
+        extracted_versions = header.scan(regex)
+        return if extracted_versions.nil? || extracted_versions.length == 0
+        extracted_versions.flatten!
+        # must contain at least one number
+        extracted_versions = extracted_versions.select { |x| x =~ /[0-9]+/ }
+        sorted = extracted_versions.sort { |x,y|
+          begin
+            Gem::Version.new(x) <=> Gem::Version.new(y)
+          rescue
+            0
+          end
+        }
+        return sorted.last
+      end
     end
 
     # Extracts the version number from a given string/body

@@ -23,7 +23,7 @@ class WpItem
 
     # @return [ Boolean ]
     def has_changelog?
-      url_is_200?(changelog_url)
+      !changelog_url.nil?
     end
 
     # Checks if the url status code is 200
@@ -35,9 +35,14 @@ class WpItem
       Browser.get(url).code == 200
     end
 
-    # @return [ String ] The url to the changelog file
+    # @return [ String,nil ] The url to the changelog file, nil if not found
     def changelog_url
-      @uri.merge('changelog.txt').to_s
+      #@uri.merge('changelog.txt').to_s
+      %w{changelog.txt Changelog.txt ChangeLog.txt CHANGELOG.txt changes.txt changelog.md release_log.html}.each do |versionfile|
+        url = @uri.merge(versionfile).to_s
+        return url if url_is_200?(url)
+      end
+      nil
     end
 
     # @return [ Boolean ]
