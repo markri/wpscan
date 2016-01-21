@@ -38,7 +38,7 @@ class WpItem
     # @return [ String,nil ] The url to the changelog file, nil if not found
     def changelog_url
       #@uri.merge('changelog.txt').to_s
-      %w{changelog.txt Changelog.txt ChangeLog.txt CHANGELOG.txt changes.txt changelog.md release_log.html}.each do |versionfile|
+      %w{changelog.txt Changelog.txt ChangeLog.txt CHANGELOG.txt changes.txt changelog.md release_log.html change_log.txt}.each do |versionfile|
         url = @uri.merge(versionfile).to_s
         return url if url_is_200?(url)
       end

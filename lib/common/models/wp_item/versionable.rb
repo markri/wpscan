@@ -37,11 +37,7 @@ class WpItem
       headerparts = bodyparts[0..2]
       header = headerparts.join("\n");
 
-      # Old method to remove PHP version false positives
-      # replaceregex = /\sPHP.{1,4}(\d{1,2}\.){1,2}\d{1,2}\s/i
-      # body = body.gsub(replaceregex, '');
-
-      regex = /((?:\d{1,2}\.){1,2}(?:\d{1,2}){0,1})\s/i
+      regex = /(?<![\d\.])((?:\d{1,2}\.){1,2}(?:\d{1,2}){0,1})(?![\d\.])/i
       if header =~ regex
         extracted_versions = header.scan(regex)
         return if extracted_versions.nil? || extracted_versions.length == 0
